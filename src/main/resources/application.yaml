@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: attendance-api
+  datasource:
+    url: jdbc:postgresql://db.xyabsjknwxyihnxvpjcn.supabase.co:5432/postgres
+    username: postgres
+    password: MUjRm2jD#bFDWK
+    driver-class-name: org.postgresql.Driver
+
+server:
+  port: 8080
