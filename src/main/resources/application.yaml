@@ -2,8 +2,9 @@ spring:
   application:
     name: attendance-api
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db.xyabsjknwxyihnxvpjcn.supabase.co:5432/postgres}
-    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    #url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db.xyabsjknwxyihnxvpjcn.supabase.co:5432/postgres}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://aws-1-sa-east-1.pooler.supabase.com:5432/postgres?user=postgres.xyabsjknwxyihnxvpjcn&password=MUjRm2jD#bFDWK}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres.xyabsjknwxyihnxvpjcn}
     password: ${SPRING_DATASOURCE_PASSWORD:"MUjRm2jD#bFDWK"}
     driver-class-name: org.postgresql.Driver
   jpa:
