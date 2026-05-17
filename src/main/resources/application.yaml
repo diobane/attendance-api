@@ -2,10 +2,14 @@ spring:
   application:
     name: attendance-api
   datasource:
-    url: jdbc:postgresql://db.xyabsjknwxyihnxvpjcn.supabase.co:5432/postgres
-    username: postgres
-    password: MUjRm2jD#bFDWK
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db.xyabsjknwxyihnxvpjcn.supabase.co:5432/postgres}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:"MUjRm2jD#bFDWK"}
     driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update # Garante que o Hibernate mapeie as tabelas ao subir (opcional)
 
 server:
-  port: 8080
+  port: ${PORT:8080}
