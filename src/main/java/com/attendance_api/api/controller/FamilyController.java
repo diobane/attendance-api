@@ -2,9 +2,11 @@ package com.attendance_api.api.controller;
 
 import com.attendance_api.api.dto.FamilyDTO;
 import com.attendance_api.api.swagger.FamilyControllerSwagger;
+import com.attendance_api.core.dto.RoleOption;
 import com.attendance_api.domain.entity.Family;
 import com.attendance_api.domain.mapper.FamilyMapper;
 import com.attendance_api.domain.service.FamilyService;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,7 @@ public class FamilyController implements FamilyControllerSwagger {
     }
 
     @GetMapping("/{key}")
+    @RolesAllowed({RoleOption.ADMIN, RoleOption.MEMBER})
     public ResponseEntity<FamilyDTO> getFamilyByKey(@PathVariable String key) {
         FamilyDTO family = familyMapper.toDto(familyService.getFamilyByKey(key));
         return ResponseEntity.ok(family);

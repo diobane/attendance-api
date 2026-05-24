@@ -112,3 +112,21 @@ ALTER TABLE "TB_FAMILY"
 
 ALTER TABLE "TB_FAMILY"
     ADD CONSTRAINT UK_FAMILY_FAMILY_KEY UNIQUE (FAMILY_KEY);
+
+-- Tabela de usuários do sistema (MEMBER / ADMIN)
+CREATE TABLE "TB_USER" (
+                           ID          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                           USERNAME       VARCHAR(255) NOT NULL UNIQUE,
+                           PASSWORD    VARCHAR(255) NOT NULL,  -- bcrypt hash
+                           ROLE        VARCHAR(20)  NOT NULL CHECK (role IN ('ADMIN', 'MEMBER')),
+                           ACTIVE      BOOLEAN NOT NULL DEFAULT TRUE,
+                           CREATED_AT  TIMESTAMPTZ DEFAULT now()
+);
+
+-- Índice para busca por email (login)
+CREATE INDEX IDX_TB_USER_USERNAME ON "TB_USER"(USERNAME);
+
+-- Inserir um admin inicial (senha: senha@123 (senha fictícia) em bcrypt)
+-- Gere o hash em: https://bcrypt-generator.com (rounds=12)
+INSERT INTO "TB_USER" (USERNAME, PASSWORD, ROLE)
+VALUES ('Admin', '$2a$12$hashGeradoAqui', 'ADMIN');
