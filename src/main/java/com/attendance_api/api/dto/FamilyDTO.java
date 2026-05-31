@@ -20,7 +20,7 @@ public class FamilyDTO {
     @Schema(description = "Internal database ID (generated automatically)", example = "1")
     private Long familyId;
 
-    @NotBlank(message = "Family key is required")
+    @NotBlank
     @Schema(description = "Unique alphanumeric business key for the family", requiredMode = Schema.RequiredMode.REQUIRED, example = "4d6c9e98-2962-47d7-8251-baac45225d28")
     private String familyKey;
 

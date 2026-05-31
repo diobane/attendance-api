@@ -18,7 +18,7 @@ public class ResponsibleDTO {
     @Schema(description = "Internal database ID for the responsible person", example = "101")
     private Long responsibleId;
 
-    @NotBlank(message = "Responsible's full name is required")
+    @NotBlank
     @Schema(description = "Full name of the parent or guardian", requiredMode = Schema.RequiredMode.REQUIRED, example = "Paizinho da Cunha Velasquez")
     private String fullName;
 

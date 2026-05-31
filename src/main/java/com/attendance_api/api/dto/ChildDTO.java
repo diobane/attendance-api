@@ -3,6 +3,7 @@ package com.attendance_api.api.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,10 +19,11 @@ public class ChildDTO {
     @Schema(description = "Internal database ID for the child", example = "42")
     private Long childId;
 
-    @NotBlank(message = "Child's full name is required")
+    @NotBlank
     @Schema(description = "Full name of the child", requiredMode = Schema.RequiredMode.REQUIRED, example = "Fulaninho da Cunha Rocha")
     private String fullName;
 
+    @NotNull
     @PositiveOrZero(message = "Age must be a positive number or zero")
     @Schema(description = "Age of the child", example = "8")
     private Integer age;
@@ -37,4 +39,12 @@ public class ChildDTO {
 
     @Schema(description = "General observations (e.g., behavioral or special needs)", example = "Autism spectrum disorder level 1")
     private String observation;
+
+    //TODO: Fazer validação baseado na idade, se for menor de 5 anos, deve ser obrigatório
+    @Schema(description = "Name of the person who will accompany the child")
+    private String guardianName;
+
+    @NotNull
+    @Schema(description = "If the child is a Seventh-day Adventist Church member")
+    private Boolean isAdventist;
 }

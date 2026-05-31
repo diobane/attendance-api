@@ -7,6 +7,7 @@ import com.attendance_api.domain.entity.Family;
 import com.attendance_api.domain.mapper.FamilyMapper;
 import com.attendance_api.domain.service.FamilyService;
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,7 @@ public class FamilyController implements FamilyControllerSwagger {
     private final FamilyMapper familyMapper;
 
     @PostMapping
-    public ResponseEntity<FamilyDTO> registerFamily(@RequestBody FamilyDTO familyDTO) {
+    public ResponseEntity<FamilyDTO> registerFamily(@Valid @RequestBody FamilyDTO familyDTO) {
         Family familyEntity = familyMapper.toEntity(familyDTO);
         FamilyDTO savedFamily = familyMapper.toDto(familyService.saveFamily(familyEntity));
         return ResponseEntity.ok(savedFamily);

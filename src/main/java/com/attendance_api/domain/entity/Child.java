@@ -17,6 +17,8 @@ public class Child {
     private String medicine;
     private String dietaryRestriction;
     private String observation;
+    private String guardianName;
+    private Boolean isAdventist;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FAMILY_ID")
