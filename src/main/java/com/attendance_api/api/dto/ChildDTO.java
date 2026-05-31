@@ -1,5 +1,6 @@
 package com.attendance_api.api.dto;
 
+import com.attendance_api.core.annotation.RequiredIf;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -14,6 +15,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "Data Transfer Object representing a child")
+@RequiredIf(
+        field = "guardianName",
+        dependsOn = "age",
+        operator = RequiredIf.Operator.LESS_THAN,
+        value = "5",
+        message = "guardianName is required for child with age under 5 years old"
+)
 public class ChildDTO {
 
     @Schema(description = "Internal database ID for the child", example = "42")
@@ -24,7 +32,7 @@ public class ChildDTO {
     private String fullName;
 
     @NotNull
-    @PositiveOrZero(message = "Age must be a positive number or zero")
+    @PositiveOrZero
     @Schema(description = "Age of the child", example = "8")
     private Integer age;
 
@@ -40,7 +48,6 @@ public class ChildDTO {
     @Schema(description = "General observations (e.g., behavioral or special needs)", example = "Autism spectrum disorder level 1")
     private String observation;
 
-    //TODO: Fazer validação baseado na idade, se for menor de 5 anos, deve ser obrigatório
     @Schema(description = "Name of the person who will accompany the child")
     private String guardianName;
 
