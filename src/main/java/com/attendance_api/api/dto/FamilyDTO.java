@@ -24,6 +24,18 @@ public class FamilyDTO {
     @Schema(description = "Unique alphanumeric business key for the family", requiredMode = Schema.RequiredMode.REQUIRED, example = "4d6c9e98-2962-47d7-8251-baac45225d28")
     private String familyKey;
 
+    //@NotNull
+    @Schema(description = "Flag used to check if the user saved the wahtsapp phone number")
+    private Boolean addedWhatsForInfo;
+
+    //@NotNull
+    @Schema(description = "Flag used to check if the user agree with the info about the obligatory use of the badge by the child")
+    private Boolean badgeAcknowledgment;
+
+    //@NotNull
+    @Schema(description = "Flag used to check if the user agree with the terms and policies")
+    private Boolean userInfoAcknowledgment;
+
     @Valid
     private List<ChildDTO> children;
 

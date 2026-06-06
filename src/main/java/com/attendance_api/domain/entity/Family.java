@@ -16,6 +16,12 @@ public class Family {
 
     private String familyKey;
 
+    private Boolean addedWhatsForInfo;
+
+    private Boolean badgeAcknowledgment;
+
+    private Boolean userInfoAcknowledgment;
+
     // O cascade e orphanRemoval garantem que filhos sejam salvos junto com a família
     @OneToMany(mappedBy = "family", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Child> children;
