@@ -21,6 +21,10 @@ public class Child {
     private Boolean isAdventist;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FAMILY_ID")
-    private Family family; // Referência preenchida pelo @AfterMapping do Mapper
+    private Family family;
 }
