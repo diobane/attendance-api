@@ -3,7 +3,9 @@ package com.attendance_api.domain.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "\"TB_FAMILY\"")
@@ -22,10 +24,9 @@ public class Family {
 
     private Boolean userInfoAcknowledgment;
 
-    // O cascade e orphanRemoval garantem que filhos sejam salvos junto com a família
     @OneToMany(mappedBy = "family", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Child> children;
 
     @OneToMany(mappedBy = "family", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Responsible> responsibles;
+    private Set<Responsible> responsibles = new LinkedHashSet<>();
 }

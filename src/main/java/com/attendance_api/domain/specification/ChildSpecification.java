@@ -7,7 +7,11 @@ import org.springframework.data.jpa.domain.Specification;
 public class ChildSpecification {
 
     public static Specification<Child> withFilter(ChildFilterDTO filter) {
-        return Specification.where(hasFullName(filter.getFullName()));
+        return (root, query, cb) -> {
+            query.distinct(true);
+            return Specification.where(hasFullName(filter.getFullName()))
+                    .toPredicate(root, query, cb);
+        };
     }
 
     private static Specification<Child> hasFullName(String fullName) {

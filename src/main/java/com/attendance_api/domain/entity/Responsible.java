@@ -2,13 +2,16 @@ package com.attendance_api.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "\"TB_RESPONSIBLE\"")
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Responsible {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long responsibleId;
 
     private String fullName;
