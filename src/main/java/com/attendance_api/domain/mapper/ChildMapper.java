@@ -1,21 +1,19 @@
 package com.attendance_api.domain.mapper;
 
+import com.attendance_api.api.dto.ChildDetailsResponseDTO;
 import com.attendance_api.api.dto.ChildResponseDTO;
 import com.attendance_api.api.dto.ResponsibleDTO;
 import com.attendance_api.api.dto.TeamDTO;
-import com.attendance_api.domain.entity.Child;
-import com.attendance_api.domain.entity.Responsible;
-import com.attendance_api.domain.entity.Team;
+import com.attendance_api.domain.entity.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface ChildMapper {
-
-    @Mapping(source = "family.familyId", target = "familyId")
-    @Mapping(source = "family.responsibles", target = "responsibles")
+    //Search
     @Mapping(source = "team", target = "team")
     ChildResponseDTO toDTO(Child child);
 
@@ -24,4 +22,18 @@ public interface ChildMapper {
     TeamDTO toDTO(Team team);
 
     ResponsibleDTO toDTO(Responsible responsible);
+
+    //Child Details
+    @Mapping(source = "family.responsibles", target = "responsibles")
+    ChildDetailsResponseDTO toDetailsDTO(Child child);
+
+    ChildDetailsResponseDTO.TeamDetails toTeamDetails(Team team);
+
+    ChildDetailsResponseDTO.FamilyDetails toFamilyDetails(Family family);
+
+    Set<ChildDetailsResponseDTO.ResponsibleDetails> toResponsibleDetailsSet(Set<Responsible> responsibles);
+
+    ChildDetailsResponseDTO.ResponsibleDetails toResponsibleDetails(Responsible responsible);
+
+    ChildDetailsResponseDTO.ResponsibleDetails.ContactDetails toContactDetails(Contact contact);
 }

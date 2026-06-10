@@ -15,5 +15,13 @@ jwt:
   secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION:86400000}  # 24 horas em ms
 
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui/index.html
+    url: /v3/api-docs
+    config-url: /v3/api-docs/swagger-config
+
 server:
   port: ${PORT:8080}

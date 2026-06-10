@@ -18,7 +18,7 @@ public class Responsible {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FAMILY_ID")
-    private Family family; // Referência preenchida pelo @AfterMapping do Mapper
+    private Family family;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CONTACT_ID")

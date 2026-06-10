@@ -13,7 +13,6 @@ public class Contact {
     @Column(name = "CONTACT_ID")
     private Long contactId;
 
-    // Mapeia explicitamente para coincidir com o snake_case do seu banco (PHONE_1)
     @Column(name = "PHONE_1", length = 20)
     private String phone1;
 

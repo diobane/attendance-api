@@ -1,19 +1,18 @@
 package com.attendance_api.domain.repository;
 
 import com.attendance_api.domain.entity.Child;
-import jakarta.persistence.QueryHint;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.QueryHints;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ChildRepository extends JpaRepository<Child, Long>, JpaSpecificationExecutor<Child> {
-    @EntityGraph(attributePaths = {"team", "family", "family.responsibles"})
-    @QueryHints(value = { @QueryHint(name = "hibernate.query.passDistinctThrough", value = "false") })
-    List<Child> findAll(Specification<Child> spec);
+    @EntityGraph(attributePaths = {"team", "family", "family.responsibles", "family.responsibles.contact"})
+    @Query("SELECT c FROM Child c WHERE c.childId = :id")
+    Optional<Child> findWithDetailsById(@Param("id") Long id);
 }
