@@ -18,10 +18,16 @@ jwt:
 springdoc:
   api-docs:
     path: /v3/api-docs
+    enabled: true
   swagger-ui:
-    path: /swagger-ui/index.html
-    url: /v3/api-docs
-    config-url: /v3/api-docs/swagger-config
+    path: /swagger-ui.html
+    enabled: true
 
 server:
   port: ${PORT:8080}
+
+logging:
+  level:
+    org.springdoc: DEBUG
+    io.swagger.v3: DEBUG
+    org.springframework.web: DEBUG
