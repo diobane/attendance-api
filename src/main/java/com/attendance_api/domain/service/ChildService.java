@@ -34,4 +34,9 @@ public class ChildService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Child not found with id: " + childId));
     }
+
+    @Transactional
+    public void updateChildTeamByChildIdAndTeamId(Long childId, Long teamId) {
+        childRepository.updateChildTeam(childId, teamId);
+    }
 }

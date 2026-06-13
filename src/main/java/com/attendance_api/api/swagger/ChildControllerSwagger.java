@@ -10,10 +10,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Child", description = "Manage the child registers")
 public interface ChildControllerSwagger {
@@ -95,4 +98,26 @@ public interface ChildControllerSwagger {
     ResponseEntity<ChildDetailsResponseDTO> getChildDetails(
             @Parameter(description = "ID of the child to retrieve", example = "1")
             Long childId);
+
+    @Operation(
+            summary = "Update the team of a child",
+            description = "Update the team of a child"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Child details retrieved successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Child not found",
+                    content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content(schema = @Schema(hidden = true))
+            )
+    })
+    ResponseEntity<Void> updateChildTeam(@PathVariable Long childId, @NotNull @RequestParam Long teamId);
 }

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,5 +49,13 @@ public class ChildController implements ChildControllerSwagger {
     @RolesAllowed({RoleOption.ADMIN, RoleOption.MEMBER})
     public ResponseEntity<ChildDetailsResponseDTO> getChildDetails(@PathVariable Long childId) {
         return ResponseEntity.ok(childMapper.toDetailsDTO(childService.getChildDetailsByChildId(childId)));
+    }
+
+    @Override
+    @PutMapping("/{childId}/team")
+    @RolesAllowed({RoleOption.ADMIN, RoleOption.MEMBER})
+    public ResponseEntity<Void> updateChildTeam(@PathVariable Long childId, @RequestParam Long teamId) {
+        childService.updateChildTeamByChildIdAndTeamId(childId, teamId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
