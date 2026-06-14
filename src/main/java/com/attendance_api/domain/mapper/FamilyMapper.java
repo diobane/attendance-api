@@ -1,9 +1,6 @@
 package com.attendance_api.domain.mapper;
 
-import com.attendance_api.api.dto.ChildDTO;
-import com.attendance_api.api.dto.ContactDTO;
-import com.attendance_api.api.dto.FamilyDTO;
-import com.attendance_api.api.dto.ResponsibleDTO;
+import com.attendance_api.api.dto.*;
 import com.attendance_api.domain.entity.Child;
 import com.attendance_api.domain.entity.Contact;
 import com.attendance_api.domain.entity.Family;
@@ -11,6 +8,9 @@ import com.attendance_api.domain.entity.Responsible;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+
+import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface FamilyMapper {
@@ -39,4 +39,16 @@ public interface FamilyMapper {
             family.getResponsibles().forEach(responsible -> responsible.setFamily(family));
         }
     }
+
+    FamilySearchResponseDTO toDTO(Family family);
+
+    List<FamilySearchResponseDTO.ChildDetails> toChildDetailsList(List<Child> children);
+
+    FamilySearchResponseDTO.ChildDetails toChildDetails(Child child);
+
+    Set<FamilySearchResponseDTO.ResponsibleDetails> toResponsibleDetailsSet(Set<Responsible> responsibles);
+
+    FamilySearchResponseDTO.ResponsibleDetails toResponsibleDetails(Responsible responsible);
+
+    FamilySearchResponseDTO.ResponsibleDetails.ContactDetails toContactDetails(Contact contact);
 }
