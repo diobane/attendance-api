@@ -58,4 +58,18 @@ public class ChildController implements ChildControllerSwagger {
         childService.updateChildTeamByChildIdAndTeamId(childId, teamId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @PostMapping("/{childId}/checkin")
+    @RolesAllowed({RoleOption.ADMIN, RoleOption.MEMBER})
+    public ResponseEntity<Void> registerCheckin(@PathVariable Long childId, @RequestParam(required = false) String familyKey) {
+        childService.registerCheckin(childId, familyKey);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/{childId}/checkout")
+    @RolesAllowed({RoleOption.ADMIN, RoleOption.MEMBER})
+    public ResponseEntity<Void> registerCheckout(@PathVariable Long childId, @RequestParam String familyKey) {
+        childService.registerCheckout(childId, familyKey);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }

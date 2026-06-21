@@ -1,4 +1,4 @@
-package com.attendance_api.core.enums;
+package com.attendance_api.domain.enums;
 
 public enum Role {
     ADMIN,

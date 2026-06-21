@@ -88,4 +88,18 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
                 )
         );
     }
+
+    @ExceptionHandler(DuplicateCheckinException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateCheckin(DuplicateCheckinException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                ErrorResponse.of("Conflict", HttpStatus.CONFLICT.value(), ex.getMessage())
+        );
+    }
+
+    @ExceptionHandler(FamilyMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleFamilyMismatchException(FamilyMismatchException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(
+                ErrorResponse.of("Unprocessable Content", HttpStatus.UNPROCESSABLE_CONTENT.value(), ex.getMessage())
+        );
+    }
 }

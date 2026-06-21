@@ -1,6 +1,6 @@
 package com.attendance_api.api.dto;
 
-import com.attendance_api.core.enums.Role;
+import com.attendance_api.domain.enums.Role;
 import com.attendance_api.domain.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;

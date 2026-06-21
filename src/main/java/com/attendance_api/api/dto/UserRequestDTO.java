@@ -1,6 +1,6 @@
 package com.attendance_api.api.dto;
 
-import com.attendance_api.core.enums.Role;
+import com.attendance_api.domain.enums.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

@@ -1,6 +1,6 @@
 package com.attendance_api.domain.entity;
 
-import com.attendance_api.core.enums.Role;
+import com.attendance_api.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
