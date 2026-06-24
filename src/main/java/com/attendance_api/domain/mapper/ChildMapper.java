@@ -15,6 +15,8 @@ import java.util.Set;
 public interface ChildMapper {
     //Search
     @Mapping(source = "team", target = "team")
+    @Mapping(source = "family", target = "family")
+    @Mapping(source = "family.responsibles", target = "responsibles")
     ChildResponseDTO toDTO(Child child);
 
     List<ChildResponseDTO> toDTOList(List<Child> children);
