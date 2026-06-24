@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "\"TB_FAMILY\"")
+@org.hibernate.annotations.BatchSize(size = 20)
 @Data
 public class Family {
     @Id
@@ -28,5 +29,6 @@ public class Family {
     private List<Child> children;
 
     @OneToMany(mappedBy = "family", cascade = CascadeType.ALL, orphanRemoval = true)
+    @org.hibernate.annotations.BatchSize(size = 20)
     private Set<Responsible> responsibles = new LinkedHashSet<>();
 }

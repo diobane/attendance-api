@@ -15,6 +15,7 @@ import java.util.Set;
 public interface ChildMapper {
     //Search
     @Mapping(source = "team", target = "team")
+    @Mapping(target = "responsiblePhone", expression = "java(firstResponsiblePhone(child))")
     ChildResponseDTO toDTO(Child child);
 
     List<ChildResponseDTO> toDTOList(List<Child> children);
@@ -36,4 +37,12 @@ public interface ChildMapper {
     ChildDetailsResponseDTO.ResponsibleDetails toResponsibleDetails(Responsible responsible);
 
     ChildDetailsResponseDTO.ResponsibleDetails.ContactDetails toContactDetails(Contact contact);
+
+    default String firstResponsiblePhone(Child child) {
+        if (child.getFamily() == null) return null;
+        Set<Responsible> responsibles = child.getFamily().getResponsibles();
+        if (responsibles == null || responsibles.isEmpty()) return null;
+        Contact contact = responsibles.stream().toList().get(0).getContact();
+        return contact != null ? contact.getPhone1() : null;
+    }
 }

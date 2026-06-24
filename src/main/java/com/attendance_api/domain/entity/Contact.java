@@ -6,6 +6,7 @@ import lombok.Data;
 @Entity
 @Table(name = "\"TB_CONTACT\"")
 @Data
+@org.hibernate.annotations.BatchSize(size = 20)
 public class Contact {
 
     @Id
