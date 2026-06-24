@@ -1,6 +1,7 @@
 package com.attendance_api.domain.repository;
 
 import com.attendance_api.domain.entity.Child;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -19,4 +20,8 @@ public interface ChildRepository extends JpaRepository<Child, Long>, JpaSpecific
             @Param("childId") Long childId,
             @Param("teamId") Long teamId
     );
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT c FROM Child c WHERE c.childId = :childId")
+    Optional<Child> findByIdWithLock(Long childId);
 }

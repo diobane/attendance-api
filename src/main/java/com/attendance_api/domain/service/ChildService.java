@@ -46,7 +46,7 @@ public class ChildService {
 
     @Transactional
     public void registerCheckin(Long childId, String familyKey) {
-        Child child = childRepository.findById(childId).orElseThrow(EntityNotFoundException::new);
+        Child child = childRepository.findByIdWithLock(childId).orElseThrow(EntityNotFoundException::new);
         if (Objects.nonNull(familyKey) && !child.getFamily().getFamilyKey().equals(familyKey)) {
             throw new FamilyMismatchException("This child does not belong to this family");
         }
@@ -55,7 +55,7 @@ public class ChildService {
 
     @Transactional
     public void registerCheckout(Long childId, String familyKey) {
-        Child child = childRepository.findById(childId).orElseThrow(EntityNotFoundException::new);
+        Child child = childRepository.findByIdWithLock(childId).orElseThrow(EntityNotFoundException::new);
         if (!child.getFamily().getFamilyKey().equals(familyKey)) {
             throw new FamilyMismatchException("This child does not belong to this family");
         }
