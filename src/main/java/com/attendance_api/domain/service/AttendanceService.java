@@ -11,11 +11,38 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class AttendanceService {
     private final AttendanceRepository attendanceRepository;
+
+    /** Horário de entrada/saída de hoje (mais recente de cada tipo) por criança. */
+    public record TodayStatus(LocalDateTime checkinAt, LocalDateTime checkoutAt) {}
+
+    @Transactional(readOnly = true)
+    public Map<Long, TodayStatus> getTodayStatusByChild() {
+        LocalDate today = LocalDate.now();
+        List<Attendance> registros = attendanceRepository.findByCreatedAtBetween(
+                today.atStartOfDay(), today.plusDays(1).atStartOfDay());
+
+        Map<Long, LocalDateTime> checkins = new HashMap<>();
+        Map<Long, LocalDateTime> checkouts = new HashMap<>();
+        for (Attendance a : registros) {
+            Long childId = a.getChild().getChildId();
+            Map<Long, LocalDateTime> alvo = a.getType() == AttendanceType.CHECKIN ? checkins : checkouts;
+            alvo.merge(childId, a.getCreatedAt(), (atual, novo) -> novo.isAfter(atual) ? novo : atual);
+        }
+
+        Map<Long, TodayStatus> status = new HashMap<>();
+        checkins.keySet().forEach(id -> status.put(id, new TodayStatus(checkins.get(id), checkouts.get(id))));
+        checkouts.keySet().forEach(id ->
+                status.computeIfAbsent(id, k -> new TodayStatus(checkins.get(id), checkouts.get(id))));
+        return status;
+    }
 
     @Transactional
     public void checkin(Child child) {
