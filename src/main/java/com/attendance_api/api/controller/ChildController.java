@@ -86,4 +86,18 @@ public class ChildController implements ChildControllerSwagger {
         childService.registerCheckout(childId, familyKey);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @DeleteMapping("/{childId}/checkin")
+    @RolesAllowed({RoleOption.ADMIN, RoleOption.MEMBER})
+    public ResponseEntity<Void> removeCheckin(@PathVariable Long childId, @RequestParam(required = false) String familyKey) {
+        childService.removeCheckin(childId, familyKey);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @DeleteMapping("/{childId}/checkout")
+    @RolesAllowed({RoleOption.ADMIN, RoleOption.MEMBER})
+    public ResponseEntity<Void> removeCheckout(@PathVariable Long childId, @RequestParam String familyKey) {
+        childService.removeCheckout(childId, familyKey);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

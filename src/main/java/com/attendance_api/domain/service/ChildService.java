@@ -61,4 +61,22 @@ public class ChildService {
         }
         attendanceService.checkout(child);
     }
+
+    @Transactional
+    public void removeCheckin(Long childId, String familyKey) {
+        Child child = childRepository.findByIdWithLock(childId).orElseThrow(EntityNotFoundException::new);
+        if (Objects.nonNull(familyKey) && !child.getFamily().getFamilyKey().equals(familyKey)) {
+            throw new FamilyMismatchException("This child does not belong to this family");
+        }
+        attendanceService.removeCheckin(child);
+    }
+
+    @Transactional
+    public void removeCheckout(Long childId, String familyKey) {
+        Child child = childRepository.findByIdWithLock(childId).orElseThrow(EntityNotFoundException::new);
+        if (!child.getFamily().getFamilyKey().equals(familyKey)) {
+            throw new FamilyMismatchException("This child does not belong to this family");
+        }
+        attendanceService.removeCheckout(child);
+    }
 }

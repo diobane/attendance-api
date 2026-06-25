@@ -79,4 +79,22 @@ public class AttendanceService {
                 .build();
         attendanceRepository.save(attendance);
     }
+
+    /** Remove o(s) registro(s) de check-in de hoje da criança (desmarcar entrada). */
+    @Transactional
+    public void removeCheckin(Child child) {
+        removeTodayByType(child, AttendanceType.CHECKIN);
+    }
+
+    /** Remove o(s) registro(s) de check-out de hoje da criança (desmarcar retirada). */
+    @Transactional
+    public void removeCheckout(Child child) {
+        removeTodayByType(child, AttendanceType.CHECKOUT);
+    }
+
+    private void removeTodayByType(Child child, AttendanceType type) {
+        LocalDate today = LocalDate.now();
+        attendanceRepository.deleteByChild_ChildIdAndTypeAndCreatedAtBetween(
+                child.getChildId(), type, today.atStartOfDay(), today.plusDays(1).atStartOfDay());
+    }
 }
