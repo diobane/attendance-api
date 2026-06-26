@@ -1,4 +1,4 @@
-package com.attendance_api.api.security;
+package com.attendance_api.core.config;
 
 import com.attendance_api.api.filter.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,8 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/webjars/**",
                                 "/v3/api-docs/**",
-                                "/v3/api-docs"
+                                "/v3/api-docs",
+                                "/actuator/health"
                         ).permitAll()
                         .requestMatchers("/auth/user/login").permitAll()
                         .requestMatchers("/family").permitAll()
