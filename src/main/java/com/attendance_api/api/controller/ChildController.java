@@ -31,7 +31,6 @@ public class ChildController implements ChildControllerSwagger {
 
     @Override
     @GetMapping("/registered-count")
-    @RolesAllowed({RoleOption.ADMIN, RoleOption.MEMBER})
     public ResponseEntity<Long> getRegisteredChildren() {
         Long count = childService.getRegisteredChildren();
         return ResponseEntity.ok(count);

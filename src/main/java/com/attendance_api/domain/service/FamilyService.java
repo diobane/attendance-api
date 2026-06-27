@@ -4,6 +4,7 @@ import com.attendance_api.api.dto.FamilyFilterDTO;
 import com.attendance_api.core.exception.DuplicatedFamilyKeyException;
 import com.attendance_api.core.exception.RegistrationLimitReachedException;
 import com.attendance_api.domain.entity.Family;
+import com.attendance_api.domain.repository.ChildRepository;
 import com.attendance_api.domain.repository.FamilyRepository;
 import com.attendance_api.domain.specification.FamilySpecification;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class FamilyService {
     private final FamilyRepository familyRepository;
+    private final ChildRepository childRepository;
 
     @Value("${app.registration.limit:200}")
     private long registrationLimit;
@@ -35,10 +37,10 @@ public class FamilyService {
         // only one transaction at a time can count + insert, preventing overshoot.
         familyRepository.acquireRegistrationLock(REGISTRATION_LOCK_KEY);
 
-        if (familyRepository.count() >= registrationLimit) {
+        if (childRepository.count() >= registrationLimit) {
             throw new RegistrationLimitReachedException(
                     "As inscrições foram encerradas. O limite de " + registrationLimit +
-                            " inscrições foi atingido."
+                            " crianças inscritas foi atingido."
             );
         }
 

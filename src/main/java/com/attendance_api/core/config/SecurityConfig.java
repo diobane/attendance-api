@@ -48,6 +48,9 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers("/auth/user/login").permitAll()
                         .requestMatchers("/family").permitAll()
+                        // Contagem pública de crianças inscritas: usada na home
+                        // para liberar/bloquear o botão de inscrição.
+                        .requestMatchers("/child/registered-count").permitAll()
                         .requestMatchers("/child").permitAll()
                         .requestMatchers("/team").permitAll()
                         .anyRequest().authenticated()
