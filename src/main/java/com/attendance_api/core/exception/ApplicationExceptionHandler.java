@@ -102,4 +102,11 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
                 ErrorResponse.of("Unprocessable Content", HttpStatus.UNPROCESSABLE_CONTENT.value(), ex.getMessage())
         );
     }
+
+    @ExceptionHandler(RegistrationLimitReachedException.class)
+    public ResponseEntity<ErrorResponse> handleRegistrationLimitReached(RegistrationLimitReachedException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(
+                ErrorResponse.of("Unprocessable Content", HttpStatus.UNPROCESSABLE_CONTENT.value(), ex.getMessage())
+        );
+    }
 }

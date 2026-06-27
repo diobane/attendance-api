@@ -26,6 +26,10 @@ springdoc:
 server:
   port: ${PORT:8080}
 
+app:
+  registration:
+    limit: ${REGISTRATION_LIMIT:200}  # Máximo de inscrições (famílias) permitidas
+
 logging:
   level:
     org.springdoc: DEBUG
