@@ -23,6 +23,37 @@ public class AttendanceService {
     /** Horário de entrada/saída de hoje (mais recente de cada tipo) por criança. */
     public record TodayStatus(LocalDateTime checkinAt, LocalDateTime checkoutAt) {}
 
+    /** Histórico completo de presença (entradas e saídas) de uma criança. */
+    @Transactional(readOnly = true)
+    public List<Attendance> getHistory(Long childId) {
+        return attendanceRepository.findByChild_ChildIdOrderByCreatedAtAsc(childId);
+    }
+
+    /**
+     * Marca uma entrada/saída em um instante específico, substituindo qualquer
+     * registro do mesmo tipo já existente naquele dia (uma marcação por dia).
+     */
+    @Transactional
+    public void markAt(Child child, AttendanceType type, LocalDateTime at) {
+        LocalDate day = at.toLocalDate();
+        attendanceRepository.deleteByChild_ChildIdAndTypeAndCreatedAtBetween(
+                child.getChildId(), type, day.atStartOfDay(), day.plusDays(1).atStartOfDay());
+
+        Attendance attendance = Attendance.builder()
+                .child(child)
+                .type(type)
+                .createdAt(at)
+                .build();
+        attendanceRepository.save(attendance);
+    }
+
+    /** Remove a entrada/saída de um dia específico (desmarcar). */
+    @Transactional
+    public void unmarkDay(Child child, AttendanceType type, LocalDate day) {
+        attendanceRepository.deleteByChild_ChildIdAndTypeAndCreatedAtBetween(
+                child.getChildId(), type, day.atStartOfDay(), day.plusDays(1).atStartOfDay());
+    }
+
     @Transactional(readOnly = true)
     public Map<Long, TodayStatus> getTodayStatusByChild() {
         LocalDate today = LocalDate.now();

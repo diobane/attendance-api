@@ -1,10 +1,12 @@
 package com.attendance_api.api.controller;
 
+import com.attendance_api.api.dto.AttendanceResponseDTO;
 import com.attendance_api.api.dto.ChildDetailsResponseDTO;
 import com.attendance_api.api.dto.ChildFilterDTO;
 import com.attendance_api.api.dto.ChildResponseDTO;
 import com.attendance_api.api.swagger.ChildControllerSwagger;
 import com.attendance_api.core.dto.RoleOption;
+import com.attendance_api.domain.enums.AttendanceType;
 import com.attendance_api.domain.mapper.ChildMapper;
 import com.attendance_api.domain.service.AttendanceService;
 import com.attendance_api.domain.service.ChildService;
@@ -15,10 +17,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -97,6 +103,40 @@ public class ChildController implements ChildControllerSwagger {
     @RolesAllowed({RoleOption.ADMIN, RoleOption.MEMBER})
     public ResponseEntity<Void> removeCheckout(@PathVariable Long childId, @RequestParam String familyKey) {
         childService.removeCheckout(childId, familyKey);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    /** Histórico de presença da criança (todas as entradas/saídas, todos os dias). */
+    @GetMapping("/{childId}/attendance")
+    @RolesAllowed({RoleOption.ADMIN, RoleOption.MEMBER})
+    public ResponseEntity<List<AttendanceResponseDTO>> getAttendance(@PathVariable Long childId) {
+        List<AttendanceResponseDTO> history = childService.getAttendanceHistory(childId).stream()
+                .map(a -> new AttendanceResponseDTO(a.getCreatedAt(), a.getType().name()))
+                .toList();
+        return ResponseEntity.ok(history);
+    }
+
+    /** Marca entrada/saída em um dia e hora específicos. */
+    @PostMapping("/{childId}/attendance")
+    @RolesAllowed({RoleOption.ADMIN, RoleOption.MEMBER})
+    public ResponseEntity<Void> markAttendance(
+            @PathVariable Long childId,
+            @RequestParam AttendanceType type,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime at,
+            @RequestParam(required = false) String familyKey) {
+        childService.markAttendance(childId, familyKey, type, at);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    /** Desmarca a entrada/saída de um dia específico. */
+    @DeleteMapping("/{childId}/attendance")
+    @RolesAllowed({RoleOption.ADMIN, RoleOption.MEMBER})
+    public ResponseEntity<Void> unmarkAttendance(
+            @PathVariable Long childId,
+            @RequestParam AttendanceType type,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(required = false) String familyKey) {
+        childService.unmarkAttendance(childId, familyKey, type, date);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

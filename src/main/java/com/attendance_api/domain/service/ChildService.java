@@ -2,7 +2,9 @@ package com.attendance_api.domain.service;
 
 import com.attendance_api.api.dto.ChildFilterDTO;
 import com.attendance_api.core.exception.FamilyMismatchException;
+import com.attendance_api.domain.entity.Attendance;
 import com.attendance_api.domain.entity.Child;
+import com.attendance_api.domain.enums.AttendanceType;
 import com.attendance_api.domain.repository.ChildRepository;
 import com.attendance_api.domain.specification.ChildSpecification;
 import jakarta.persistence.EntityNotFoundException;
@@ -12,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -78,5 +83,37 @@ public class ChildService {
             throw new FamilyMismatchException("This child does not belong to this family");
         }
         attendanceService.removeCheckout(child);
+    }
+
+    /** Histórico completo de presença de uma criança (para a tela de presença por dia). */
+    @Transactional(readOnly = true)
+    public List<Attendance> getAttendanceHistory(Long childId) {
+        if (!childRepository.existsById(childId)) {
+            throw new EntityNotFoundException("Child not found with id: " + childId);
+        }
+        return attendanceService.getHistory(childId);
+    }
+
+    /** Marca entrada/saída em um dia e hora específicos. */
+    @Transactional
+    public void markAttendance(Long childId, String familyKey, AttendanceType type, LocalDateTime at) {
+        Child child = childRepository.findByIdWithLock(childId).orElseThrow(EntityNotFoundException::new);
+        ensureFamily(child, familyKey);
+        attendanceService.markAt(child, type, at);
+    }
+
+    /** Desmarca a entrada/saída de um dia específico. */
+    @Transactional
+    public void unmarkAttendance(Long childId, String familyKey, AttendanceType type, LocalDate day) {
+        Child child = childRepository.findByIdWithLock(childId).orElseThrow(EntityNotFoundException::new);
+        ensureFamily(child, familyKey);
+        attendanceService.unmarkDay(child, type, day);
+    }
+
+    /** Valida que a criança pertence à família informada (quando informada). */
+    private void ensureFamily(Child child, String familyKey) {
+        if (Objects.nonNull(familyKey) && !child.getFamily().getFamilyKey().equals(familyKey)) {
+            throw new FamilyMismatchException("This child does not belong to this family");
+        }
     }
 }

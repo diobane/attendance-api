@@ -15,6 +15,9 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     @EntityGraph(attributePaths = "child")
     List<Attendance> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 
+    /** Todo o histórico de presença de uma criança (entradas e saídas). */
+    List<Attendance> findByChild_ChildIdOrderByCreatedAtAsc(Long childId);
+
     void deleteByChild_ChildIdAndTypeAndCreatedAtBetween(
             Long childId, AttendanceType type, LocalDateTime start, LocalDateTime end);
 }
